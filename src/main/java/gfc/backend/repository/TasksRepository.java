@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface TasksRepository extends CrudRepository<Task, Long> {
-    List<Task> findAllByOwnerId(long ownerId);
+    List<Task> findAllByOwnerId(Long ownerId);
 
 }

@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,5 +33,12 @@ public class Task {
         this.name = newTask.getName();
         this.description = newTask.getDescription();
         this.points = newTask.getPoints();
+    }
+
+    public Task(RepeatableTask editedTask) {
+        this.ownerId = editedTask.getOwnerId();
+        this.name = editedTask.getName();
+        this.description = editedTask.getDescription();
+        this.points = editedTask.getPoints();
     }
 }

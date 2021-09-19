@@ -1,6 +1,7 @@
 package gfc.backend.controller;
 
 import gfc.backend.dto.TaskDTO;
+import gfc.backend.model.RepeatableTask;
 import gfc.backend.model.Task;
 import gfc.backend.service.TasksService;
 import lombok.AllArgsConstructor;
@@ -13,12 +14,17 @@ import java.util.List;
 @RequestMapping("/tasks")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class tasksController {
+public class TasksController {
     private final TasksService tasksService;
 
-    @GetMapping("/{ownerId}")
-    List<Task> getAllUserTasks(@PathVariable long ownerId) {
+    @GetMapping("/all/{ownerId}")
+    List<Task> getAllUserTasks(@PathVariable Long ownerId) {
         return tasksService.getAllUserTasks(ownerId);
+    }
+
+    @GetMapping("/allre/{ownerId}")
+    List<RepeatableTask> getAllUserRepeatableTasks(@PathVariable Long ownerId) {
+        return tasksService.getAllUserRepeatableTasks(ownerId);
     }
 
     @PostMapping("/add")
@@ -29,6 +35,21 @@ public class tasksController {
     @PostMapping("/edit")
     public Long editTask(@RequestBody Task editedTask) {
         return tasksService.editTask(editedTask);
+    }
+
+    @PostMapping("/editRe")
+    public Long editTask(@RequestBody RepeatableTask editedTask) {
+        return tasksService.editTask(editedTask);
+    }
+
+    @GetMapping("/remove/{id}")
+    public Long removeTask(@PathVariable Long id) {
+        return tasksService.removeTask(id);
+    }
+
+    @GetMapping("/done/{id}")
+    public Long taskDone(@PathVariable Long id) {
+        return tasksService.taskDone(id);
     }
 
 }
