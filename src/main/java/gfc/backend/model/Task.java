@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -39,7 +39,7 @@ public class TasksController {
 
     @PostMapping("/editRe")
     public Long editTask(@RequestBody RepeatableTask editedTask) {
-        return tasksService.editTask(editedTask);
+        return tasksService.editReTask(editedTask);
     }
 
     @GetMapping("/remove/{id}")
