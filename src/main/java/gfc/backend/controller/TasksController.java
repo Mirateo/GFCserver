@@ -24,6 +24,7 @@ public class TasksController {
 
     @GetMapping("/allre/{ownerId}")
     List<RepeatableTask> getAllUserRepeatableTasks(@PathVariable Long ownerId) {
+        System.out.println("Sent:\n" + tasksService.getAllUserRepeatableTasks(ownerId));
         return tasksService.getAllUserRepeatableTasks(ownerId);
     }
 

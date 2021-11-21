@@ -33,9 +33,6 @@ public class RepeatableTask {
 
     private Long points;
 
-    @NotNull
-    private Boolean doneToday;
-
     @Nullable
     private Date lastDone;
 
@@ -45,8 +42,7 @@ public class RepeatableTask {
         this.name = newTask.getName();
         this.description = newTask.getDescription();
         this.points = newTask.getPoints();
-        this.doneToday = false;
-        this.lastDone = null;
+        this.lastDone = new Date(0);
     }
 
     public RepeatableTask(RepeatableTask editedTask) {
@@ -55,7 +51,6 @@ public class RepeatableTask {
         this.name = editedTask.getName();
         this.description = editedTask.getDescription();
         this.points = editedTask.getPoints();
-        this.doneToday = editedTask.getDoneToday();
         this.lastDone = editedTask.getLastDone();
     }
 }

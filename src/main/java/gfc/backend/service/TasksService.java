@@ -81,7 +81,6 @@ public class TasksService {
 
         if (repeatableTaskRepository.findById(id).isPresent()) {
             RepeatableTask task = repeatableTaskRepository.findById(id).get();
-            task.setDoneToday(true);
             task.setLastDone(new Date(System.currentTimeMillis()));
             repeatableTaskRepository.save(task);
             return 0L;
