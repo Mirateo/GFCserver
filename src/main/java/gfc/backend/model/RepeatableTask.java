@@ -42,7 +42,7 @@ public class RepeatableTask {
         this.name = newTask.getName();
         this.description = newTask.getDescription();
         this.points = newTask.getPoints();
-        this.lastDone = new Date(0);
+        this.lastDone = null;
     }
 
     public RepeatableTask(RepeatableTask editedTask) {
@@ -52,5 +52,12 @@ public class RepeatableTask {
         this.description = editedTask.getDescription();
         this.points = editedTask.getPoints();
         this.lastDone = editedTask.getLastDone();
+    }
+
+    public void setLastDone(@Nullable Date lastDone) {
+        if ( lastDone == null ) {
+            this.lastDone = null;
+        }
+        this.lastDone = lastDone;
     }
 }

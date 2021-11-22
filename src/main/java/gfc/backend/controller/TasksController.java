@@ -30,7 +30,11 @@ public class TasksController {
 
     @PostMapping("/add")
     public Long addTask(@RequestBody TaskDTO newTask) {
-        return tasksService.addTask(newTask);
+        Long tmp = tasksService.addTask(newTask);
+
+        System.out.println(tasksService.getAllUserRepeatableTasks(0L));
+
+        return tmp;
     }
 
     @PostMapping("/edit")
