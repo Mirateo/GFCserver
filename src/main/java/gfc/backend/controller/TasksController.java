@@ -57,4 +57,8 @@ public class TasksController {
         return tasksService.taskDone(id);
     }
 
+    @GetMapping("/undone/{id}")
+    public Long taskUndone(@PathVariable Long id) {
+        return tasksService.taskUndone(id);
+    }
 }

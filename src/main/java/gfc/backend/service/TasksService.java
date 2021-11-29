@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.sql.Time;
-import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -78,14 +76,22 @@ public class TasksService {
             tasksRepository.deleteById(id);
             return 0L;
         }
-
         if (repeatableTaskRepository.findById(id).isPresent()) {
             RepeatableTask task = repeatableTaskRepository.findById(id).get();
             task.setLastDone(new Date(System.currentTimeMillis()));
             repeatableTaskRepository.save(task);
             return 0L;
         }
+        return (long) -1;
+    }
 
+    public Long taskUndone(Long id) {
+        if (repeatableTaskRepository.findById(id).isPresent()) {
+            RepeatableTask task = repeatableTaskRepository.findById(id).get();
+            task.setLastDone(new Date(System.currentTimeMillis()- 24*60*60*1000));
+            repeatableTaskRepository.save(task);
+            return 0L;
+        }
         return (long) -1;
     }
 }

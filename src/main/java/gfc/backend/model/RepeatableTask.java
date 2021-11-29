@@ -5,7 +5,6 @@ import com.sun.istack.Nullable;
 import gfc.backend.dto.TaskDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -52,12 +51,5 @@ public class RepeatableTask {
         this.description = editedTask.getDescription();
         this.points = editedTask.getPoints();
         this.lastDone = editedTask.getLastDone();
-    }
-
-    public void setLastDone(@Nullable Date lastDone) {
-        if ( lastDone == null ) {
-            this.lastDone = null;
-        }
-        this.lastDone = lastDone;
     }
 }
