@@ -6,6 +6,7 @@ import gfc.backend.model.Task;
 import gfc.backend.service.TasksService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,12 +30,13 @@ public class TasksController {
     }
 
     @PostMapping("/add")
-    public Long addTask(@RequestBody TaskDTO newTask) {
-        Long tmp = tasksService.addTask(newTask);
-
-        System.out.println(tasksService.getAllUserRepeatableTasks(0L));
-
-        return tmp;
+    public Long addTask(@RequestBody EntityModel<TaskDTO> newTask) {
+        if (newTask.getContent() == null) {
+            return -1L;
+        }
+        else {
+            return tasksService.addTask(newTask.getContent());
+        }
     }
 
     @PostMapping("/edit")
