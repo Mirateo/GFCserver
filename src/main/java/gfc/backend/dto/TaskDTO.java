@@ -1,5 +1,11 @@
 package gfc.backend.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
 public class TaskDTO {
     private Long ownerId;
     private String name;
