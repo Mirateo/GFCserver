@@ -34,14 +34,10 @@ public class TasksController {
     }
 
     @PostMapping("/add")
-    public Long addTask(@RequestBody String newTask) throws JsonProcessingException {
-        // ObjectMapper instantiation
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        return tasksService.addTask(objectMapper.readValue(newTask, TaskDTO.class));
+    public Long addTask(@RequestBody TaskDTO newTask) throws JsonProcessingException {
+        return tasksService.addTask(newTask);
 
     }
-
     @PostMapping("/edit")
     public Long editTask(@RequestBody Task editedTask) {
         return tasksService.editTask(editedTask);
