@@ -1,11 +1,15 @@
 package gfc.backend.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gfc.backend.dto.TaskDTO;
 import gfc.backend.model.RepeatableTask;
 import gfc.backend.model.Task;
 import gfc.backend.service.TasksService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,13 +34,12 @@ public class TasksController {
     }
 
     @PostMapping("/add")
-    public Long addTask(@RequestBody EntityModel<TaskDTO> newTask) {
-        if (newTask.getContent() == null) {
-            return -1L;
-        }
-        else {
-            return tasksService.addTask(newTask.getContent());
-        }
+    public Long addTask(@RequestBody String newTask) throws JsonProcessingException {
+        // ObjectMapper instantiation
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return tasksService.addTask(objectMapper.readValue(newTask, TaskDTO.class));
+
     }
 
     @PostMapping("/edit")
