@@ -52,4 +52,15 @@ public class TaskDTO {
     public void setRepeatable(Boolean repeatable) {
         this.repeatable = repeatable;
     }
+
+    @Override
+    public String toString() {
+        return "TaskDTO{" +
+                "ownerId=" + ownerId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", points=" + points +
+                ", repeatable=" + repeatable +
+                '}';
+    }
 }
