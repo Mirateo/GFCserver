@@ -35,9 +35,10 @@ public class TasksController {
 
     @PostMapping("/add")
     public Long addTask(@RequestBody TaskDTO newTask) throws JsonProcessingException {
+        System.out.println("Your new task: " + newTask.toString());
         return tasksService.addTask(newTask);
-
     }
+
     @PostMapping("/edit")
     public Long editTask(@RequestBody Task editedTask) {
         return tasksService.editTask(editedTask);
