@@ -8,8 +8,6 @@ import gfc.backend.model.Task;
 import gfc.backend.service.TasksService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
