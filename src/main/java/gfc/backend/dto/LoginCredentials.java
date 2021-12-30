@@ -1,4 +1,4 @@
-package gfc.backend.config;
+package gfc.backend.dto;
 
 import lombok.Getter;
 

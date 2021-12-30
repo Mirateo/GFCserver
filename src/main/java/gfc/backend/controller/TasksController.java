@@ -9,6 +9,8 @@ import gfc.backend.service.TasksService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +23,9 @@ public class TasksController {
     private final TasksService tasksService;
 
     @GetMapping("/all/{ownerId}")
-    List<Task> getAllUserTasks(@PathVariable Long ownerId) {
+    List<Task> getAllUserTasks(@PathVariable Long ownerId,
+                               @AuthenticationPrincipal UsernamePasswordAuthenticationToken user) {
+        user.getPrincipal();
         return tasksService.getAllUserTasks(ownerId);
     }
 

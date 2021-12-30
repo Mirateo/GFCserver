@@ -1,47 +1,63 @@
 package gfc.backend.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gfc.backend.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.sql.DataSource;
 
 @Configuration
-@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final DataSource datasource;
+    private final UserDetailsServiceImpl userDetailsService;
     private final ObjectMapper objectMapper;
     private final RestAuthenticationFailureHandler failureHandler;
     private final RestAuthenticationSuccessHandler successHandler;
+    private final String secret;
+
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, ObjectMapper objectMapper,
+                          RestAuthenticationFailureHandler failureHandler,
+                          RestAuthenticationSuccessHandler successHandler,
+                          @Value("${jwt.secret}") String secret) {
+        this.userDetailsService = userDetailsService;
+        this.objectMapper = objectMapper;
+        this.failureHandler = failureHandler;
+        this.successHandler = successHandler;
+        this.secret = secret;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(datasource)
-                .usersByUsernameQuery(
-                        "select username, password, enabled from users where username=?")
-                .authoritiesByUsernameQuery(
-                        "select username, role from user_roles where username=?")
-                .withUser("test")
-                .password("{bcrypt}" + new BCryptPasswordEncoder().encode("test"))
-                .roles("USER");
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+        http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/auth/signup").permitAll()
+                .antMatchers("/login*").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(authenticationFilter())
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userDetailsService, secret))
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
     }
