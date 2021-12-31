@@ -5,9 +5,11 @@ import gfc.backend.model.RepeatableTask;
 import gfc.backend.model.Task;
 import gfc.backend.repository.RepeatableTaskRepository;
 import gfc.backend.repository.TasksRepository;
+import gfc.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.sql.Date;
 import java.util.List;
@@ -42,7 +44,7 @@ public class TasksService {
             return tasksRepository.save(editedTask).getId();
         }
 
-        return (long) -1;
+        return -1L;
     }
 
     public Long editReTask(RepeatableTask editedTask) {
@@ -54,44 +56,52 @@ public class TasksService {
             return repeatableTaskRepository.save(editedTask).getId();
         }
 
-        return (long) -1;
+        return -1L;
     }
-
-    public Long removeTask(Long id) {
+//
+    public Long removeTask(Long id, Long userId) {
         if (tasksRepository.existsById(id)) {
+            if(!tasksRepository.findById(id).get().getOwnerId().equals(userId))
+                return -2L;
             tasksRepository.deleteById(id);
             return 0L;
         }
-
         if (repeatableTaskRepository.existsById(id)) {
+            if(!repeatableTaskRepository.findById(id).get().getOwnerId().equals(userId))
+                return -2L;
             repeatableTaskRepository.deleteById(id);
             return 0L;
         }
-
-        return (long) -1;
+        return -1L;
     }
 
-    public Long taskDone(Long id) {
+    public Long taskDone(Long id, Long userId) {
         if (tasksRepository.existsById(id)) {
+            if(!tasksRepository.findById(id).get().getOwnerId().equals(userId))
+                return -2L;
             tasksRepository.deleteById(id);
             return 0L;
         }
         if (repeatableTaskRepository.findById(id).isPresent()) {
+            if(!repeatableTaskRepository.findById(id).get().getOwnerId().equals(userId))
+                return -2L;
             RepeatableTask task = repeatableTaskRepository.findById(id).get();
             task.setLastDone(new Date(System.currentTimeMillis()));
             repeatableTaskRepository.save(task);
             return 0L;
         }
-        return (long) -1;
+        return -1L;
     }
 
-    public Long taskUndone(Long id) {
+    public Long taskUndone(Long id, Long userId) {
         if (repeatableTaskRepository.findById(id).isPresent()) {
+            if(!repeatableTaskRepository.findById(id).get().getOwnerId().equals(userId))
+                return -2L;
             RepeatableTask task = repeatableTaskRepository.findById(id).get();
             task.setLastDone(new Date(System.currentTimeMillis()- 24*60*60*1000));
             repeatableTaskRepository.save(task);
             return 0L;
         }
-        return (long) -1;
+        return -1L;
     }
 }
