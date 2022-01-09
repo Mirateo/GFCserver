@@ -26,20 +26,20 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest){
         if(signupRequest.getEmail().isEmpty() || signupRequest.getPassword().isEmpty() || signupRequest.getUsername().isEmpty()){
-            return ResponseEntity.badRequest().body(new MessageResponse("Błąd: Zapytanie niekompletne!"));
+            return ResponseEntity.badRequest().body("Błąd: Zapytanie niekompletne!");
         }
 
         if(userRepository.existsByUsername(signupRequest.getUsername())){
-            return ResponseEntity.badRequest().body(new MessageResponse("Błąd: Nazwa użytkownika zajęta!"));
+            return ResponseEntity.badRequest().body("Błąd: Nazwa użytkownika zajęta!");
         }
 
         if(userRepository.existsByEmail(signupRequest.getEmail())){
-            return ResponseEntity.badRequest().body(new MessageResponse("Błąd: Adres email jest przypisany do innego konta!"));
+            return ResponseEntity.badRequest().body("Błąd: Adres email jest przypisany do innego konta!");
         }
 
         User user = new User(signupRequest.getUsername(), signupRequest.getEmail(), passwordEncoder.encode(signupRequest.getPassword()));
 
         userRepository.save(user);
-        return ResponseEntity.ok(new MessageResponse("Użytkownik zarejestrowany pomyślnie!"));
+        return ResponseEntity.ok("Użytkownik zarejestrowany pomyślnie!");
     }
 }
