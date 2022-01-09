@@ -36,7 +36,7 @@ public class TasksController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         if (users.findByUsername(username).isEmpty())
-            return new ResponseEntity<>("User doesn't exist", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("User doesn't exist", HttpStatus.NOT_FOUND);
         if (!ownerId.equals(users.findByUsername(username).get().getId()))
            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(tasksService.getAllUserTasks(ownerId), HttpStatus.OK);
