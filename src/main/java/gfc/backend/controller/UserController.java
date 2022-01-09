@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -24,7 +26,7 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest){
         if(signupRequest.getEmail().isEmpty() || signupRequest.getPassword().isEmpty() || signupRequest.getUsername().isEmpty()){
             return ResponseEntity.badRequest().body("Błąd: Zapytanie niekompletne!");
         }
