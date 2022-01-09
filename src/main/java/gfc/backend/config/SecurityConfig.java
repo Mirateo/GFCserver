@@ -61,9 +61,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 
-        http.requiresChannel()
-                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
-                .requiresSecure();
+//        http.requiresChannel()
+//                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+//                .requiresSecure();
     }
 
     public JsonObjectAuthenticationFilter authenticationFilter() throws Exception {
