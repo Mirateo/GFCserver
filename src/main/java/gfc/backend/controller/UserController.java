@@ -27,10 +27,6 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest){
-        if(signupRequest.getEmail().isEmpty() || signupRequest.getPassword().isEmpty() || signupRequest.getUsername().isEmpty()){
-            return ResponseEntity.badRequest().body("Błąd: Zapytanie niekompletne!");
-        }
-
         if(userRepository.existsByUsername(signupRequest.getUsername())){
             return ResponseEntity.badRequest().body("Błąd: Nazwa użytkownika zajęta!");
         }
