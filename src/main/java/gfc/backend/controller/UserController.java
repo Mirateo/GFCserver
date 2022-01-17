@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/user_info")
-    public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal UsernamePasswordAuthenticationToken creds){
+    public ResponseEntity<?> getUserInfo(){
         System.out.println("!!!Info: ");
         System.out.println(creds.getPrincipal().toString());
         System.out.println(creds.getPrincipal());
