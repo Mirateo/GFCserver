@@ -4,6 +4,7 @@ import gfc.backend.dto.MessageResponse;
 import gfc.backend.dto.SignupRequest;
 import gfc.backend.dto.UserInfo;
 import gfc.backend.model.User;
+import gfc.backend.model.UserDetailsImpl;
 import gfc.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -43,9 +46,9 @@ public class UserController {
     }
 
     @GetMapping("/user_info")
-    public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal UsernamePasswordAuthenticationToken creds){
-        System.out.println("!!! " + creds.toString());
-        Optional<User> user = userRepository.findByUsername(creds.getPrincipal().toString());
+    public ResponseEntity<?> getUserInfo(){
+        System.out.println("!!! " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        Optional<User> user = Optional.of(new User());//userRepository.findByUsername(creds.getPrincipal().toString());
         if (user.isPresent()){
             return ResponseEntity.ok(new UserInfo(user.get()));
         }
