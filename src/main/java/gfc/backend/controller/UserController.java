@@ -4,7 +4,6 @@ import gfc.backend.dto.MessageResponse;
 import gfc.backend.dto.SignupRequest;
 import gfc.backend.dto.UserInfo;
 import gfc.backend.model.User;
-import gfc.backend.model.UserDetailsImpl;
 import gfc.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +46,8 @@ public class UserController {
 
     @GetMapping("/user_info")
     public ResponseEntity<?> getUserInfo(){
-        System.out.println("!!! " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        Optional<User> user = Optional.of(new User());//userRepository.findByUsername(creds.getPrincipal().toString());
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()){
             return ResponseEntity.ok(new UserInfo(user.get()));
         }
