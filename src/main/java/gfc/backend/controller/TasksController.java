@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gfc.backend.dto.MessageResponse;
 import gfc.backend.dto.TaskDTO;
+import gfc.backend.dto.UserInfo;
 import gfc.backend.model.RepeatableTask;
 import gfc.backend.model.Task;
+import gfc.backend.model.User;
 import gfc.backend.repository.UserRepository;
 import gfc.backend.service.TasksService;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/tasks")
@@ -28,34 +31,33 @@ import java.util.List;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class TasksController {
     private final TasksService tasksService;
-    UserRepository users;
+    UserRepository userRepository;
 
 
-    @GetMapping("/all/{ownerId}")
-    ResponseEntity<?> getAllUserTasks(@PathVariable Long ownerId) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    @GetMapping("/all")
+    ResponseEntity<?> getAllUserTasks() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> user = userRepository.findByUsername(username);
 
-        if (users.findByUsername(username).isEmpty())
-            return new ResponseEntity<>("User doesn't exist", HttpStatus.NOT_FOUND);
-        if (!ownerId.equals(users.findByUsername(username).get().getId()))
-           return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
-        return new ResponseEntity<>(tasksService.getAllUserTasks(ownerId), HttpStatus.OK);
+        if (user.isEmpty())
+            return ResponseEntity.badRequest().body("User doesn't exist!");
+
+        return new ResponseEntity<>(tasksService.getAllUserTasks(user.get().getId()), HttpStatus.OK);
     }
 
-    @GetMapping("/allre/{ownerId}")
-    ResponseEntity<?> getAllUserRepeatableTasks(@PathVariable Long ownerId) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    @GetMapping("/allre")
+    ResponseEntity<?> getAllUserRepeatableTasks() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> user = userRepository.findByUsername(username);
 
-        if (users.findByUsername(username).isEmpty())
-            return new ResponseEntity<>("User doesn't exist", HttpStatus.UNAUTHORIZED);
-        if (!ownerId.equals(users.findByUsername(username).get().getId()))
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
-        return new ResponseEntity<>(tasksService.getAllUserRepeatableTasks(ownerId), HttpStatus.OK);
+        if (user.isEmpty())
+            return ResponseEntity.badRequest().body("User doesn't exist!");
+
+        return new ResponseEntity<>(tasksService.getAllUserRepeatableTasks(user.get().getId()), HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addTask(@RequestBody TaskDTO newTask,
-                        @AuthenticationPrincipal UsernamePasswordAuthenticationToken user)  {
+    public ResponseEntity<?> addTask(@RequestBody TaskDTO newTask)  {
         return new ResponseEntity<>(tasksService.addTask(newTask), HttpStatus.OK);
     }
 
@@ -83,26 +85,26 @@ public class TasksController {
 
     @GetMapping("/remove/{id}")
     public ResponseEntity<?> removeTask(@PathVariable Long id) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (users.findByUsername(username).isEmpty())
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userRepository.findByUsername(username).isEmpty())
             return new ResponseEntity<>("User doesn't exist", HttpStatus.UNAUTHORIZED);
-        return generateResponse(tasksService.removeTask(id, users.findByUsername(username).get().getId()));
+        return generateResponse(tasksService.removeTask(id, userRepository.findByUsername(username).get().getId()));
     }
 
     @GetMapping("/done/{id}")
     public ResponseEntity<?> taskDone(@PathVariable Long id) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (users.findByUsername(username).isEmpty())
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userRepository.findByUsername(username).isEmpty())
             return new ResponseEntity<>("User doesn't exist", HttpStatus.UNAUTHORIZED);
-        return generateResponse(tasksService.taskDone(id, users.findByUsername(username).get().getId()));
+        return generateResponse(tasksService.taskDone(id, userRepository.findByUsername(username).get().getId()));
     }
 
     @GetMapping("/undone/{id}")
     public ResponseEntity<?> taskUndone(@PathVariable Long id) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (users.findByUsername(username).isEmpty())
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userRepository.findByUsername(username).isEmpty())
             return new ResponseEntity<>("User doesn't exist", HttpStatus.UNAUTHORIZED);
-        return generateResponse(tasksService.taskUndone(id, users.findByUsername(username).get().getId()));
+        return generateResponse(tasksService.taskUndone(id, userRepository.findByUsername(username).get().getId()));
 
     }
 }
