@@ -30,10 +30,10 @@ public class TasksService {
 
     public Long addTask(TaskDTO newTask) {
         System.out.println(newTask.toString());
-        if ( newTask.getRepeatable() )
-            return repeatableTaskRepository.save(new RepeatableTask(newTask)).getId();
-        else
+        if (!newTask.getRepeatable())
             return tasksRepository.save(new Task(newTask)).getId();
+        else
+            return repeatableTaskRepository.save(new RepeatableTask(newTask)).getId();
     }
 
     public Long editTask(Task editedTask) {
