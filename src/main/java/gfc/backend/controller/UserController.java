@@ -46,10 +46,10 @@ public class UserController {
     public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal UsernamePasswordAuthenticationToken creds){
         Optional<User> user = userRepository.findByUsername(creds.getPrincipal().toString());
         if (user.isPresent()){
-            return new ResponseEntity<>(new UserInfo(user.get()), HttpStatus.OK);
+            return ResponseEntity.ok(new UserInfo(user.get()));
         }
         else {
-            return new ResponseEntity<>("Invalid token.", HttpStatus.NOT_FOUND);
+            return ResponseEntity.badRequest().body("Invalid token!");
         }
     }
 }
