@@ -43,19 +43,13 @@ public class UserController {
     }
 
     @GetMapping("/user_info")
-    public ResponseEntity<?> getUserInfo(){
-        System.out.println("!!!Info: ");
-//        System.out.println(creds.getPrincipal().toString());
-//        System.out.println(creds.getPrincipal());
-//        Optional<User> user = userRepository.findByUsername(creds.getPrincipal().toString());
-//        System.out.println(user.get().toString());
-//        if (user.isPresent()){
-//            return new ResponseEntity<>(new UserInfo(user.get()), HttpStatus.OK);
-        return new ResponseEntity<String>( HttpStatus.OK);
-
-//        }
-//        else {
-//            return new ResponseEntity<>("Invalid token.", HttpStatus.NOT_FOUND);
-//        }
+    public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal UsernamePasswordAuthenticationToken creds){
+        Optional<User> user = userRepository.findByUsername(creds.getPrincipal().toString());
+        if (user.isPresent()){
+            return new ResponseEntity<>(new UserInfo(user.get()), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("Invalid token.", HttpStatus.NOT_FOUND);
+        }
     }
 }
