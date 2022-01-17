@@ -29,6 +29,7 @@ public class TasksService {
     }
 
     public Long addTask(TaskDTO newTask) {
+        System.out.println(newTask.toString());
         if ( newTask.getRepeatable() )
             return repeatableTaskRepository.save(new RepeatableTask(newTask)).getId();
         else
