@@ -44,6 +44,7 @@ public class UserController {
 
     @GetMapping("/user_info")
     public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal UsernamePasswordAuthenticationToken creds){
+        System.out.println("!!!Info: ");
         System.out.println(creds.getPrincipal().toString());
         System.out.println(creds.getPrincipal());
         Optional<User> user = userRepository.findByUsername(creds.getPrincipal().toString());
