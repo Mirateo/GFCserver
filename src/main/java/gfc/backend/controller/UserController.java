@@ -55,4 +55,30 @@ public class UserController {
             return ResponseEntity.badRequest().body("Invalid token!");
         }
     }
+
+    @PostMapping("/user_info/edit")
+    public ResponseEntity<?> editUserInfo(User newData){
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()){
+            user.get().edit(newData);
+            userRepository.save(user.get());
+            return ResponseEntity.ok(new UserInfo(user.get()));
+        }
+        else {
+            return ResponseEntity.badRequest().body("Invalid token!");
+        }
+    }
+
+    @PostMapping("/credentials/edit")
+    public ResponseEntity<?> editUserCreds(){
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()){
+            return ResponseEntity.ok(new UserInfo(user.get()));
+        }
+        else {
+            return ResponseEntity.badRequest().body("Invalid token!");
+        }
+    }
 }
