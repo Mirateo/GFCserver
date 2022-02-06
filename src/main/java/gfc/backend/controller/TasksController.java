@@ -1,10 +1,6 @@
 package gfc.backend.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import gfc.backend.dto.MessageResponse;
 import gfc.backend.dto.TaskDTO;
-import gfc.backend.dto.UserInfo;
 import gfc.backend.model.RepeatableTask;
 import gfc.backend.model.Task;
 import gfc.backend.model.User;
@@ -12,17 +8,11 @@ import gfc.backend.repository.UserRepository;
 import gfc.backend.service.TasksService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
