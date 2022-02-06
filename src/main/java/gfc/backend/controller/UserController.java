@@ -55,9 +55,10 @@ public class UserController {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
+            newData.setPassword(passwordEncoder.encode(newData.getPassword()));
             user.get().edit(newData);
             userRepository.save(user.get());
-            return ResponseEntity.ok("Użytkownik dodany prawdidłowo.");
+            return ResponseEntity.ok("Dane użytkownika poprawnie zmienione.");
         }
         else {
             return ResponseEntity.badRequest().body("Invalid token!");
