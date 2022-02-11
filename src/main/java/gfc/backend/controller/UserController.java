@@ -25,6 +25,7 @@ public class UserController {
     @Autowired
     private final PasswordEncoder passwordEncoder;
 
+
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest){
         if(userRepository.existsByUsername(signupRequest.getUsername())){
@@ -33,6 +34,7 @@ public class UserController {
         if(userRepository.existsByEmail(signupRequest.getEmail())){
             return ResponseEntity.badRequest().body("Błąd: Adres email jest przypisany do innego konta!");
         }
+
         User user = new User(signupRequest.getUsername(), signupRequest.getEmail(), passwordEncoder.encode(signupRequest.getPassword()));
         userRepository.save(user);
         return ResponseEntity.ok("Użytkownik zarejestrowany pomyślnie!");
@@ -52,9 +54,19 @@ public class UserController {
 
     @PostMapping("/user_info/edit")
     public ResponseEntity<?> editUserInfo(User newData){
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<User> user = userRepository.findByUsername(username);
+        Optional<User> user = userRepository.findById(newData.getId());
+
         if (user.isPresent()) {
+            if (!newData.getUsername().equals(user.get().getUsername())){
+                if(userRepository.existsByUsername(newData.getUsername())){
+                    return ResponseEntity.badRequest().body("Błąd: Nazwa użytkownika zajęta!");
+                }
+            }
+            if (!newData.getEmail().equals(user.get().getEmail())){
+                if(userRepository.existsByEmail(newData.getEmail())){
+                    return ResponseEntity.badRequest().body("Błąd: Adres email jest przypisany do innego konta!");
+                }
+            }
             newData.setPassword(passwordEncoder.encode(newData.getPassword()));
             user.get().edit(newData);
             userRepository.save(user.get());
