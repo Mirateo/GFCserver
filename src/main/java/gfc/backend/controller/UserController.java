@@ -25,7 +25,6 @@ public class UserController {
     @Autowired
     private final PasswordEncoder passwordEncoder;
 
-
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest){
         if(userRepository.existsByUsername(signupRequest.getUsername())){
