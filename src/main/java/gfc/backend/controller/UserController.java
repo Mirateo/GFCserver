@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @PostMapping("/user_info/edit")
-    public ResponseEntity<?> editUserInfo(User newData){
+    public ResponseEntity<?> editUserInfo(@Valid @RequestBody User newData){
         System.out.println(newData.toString());
         Optional<User> user = userRepository.findById(newData.getId());
 
