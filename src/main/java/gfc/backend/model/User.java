@@ -1,8 +1,6 @@
 package gfc.backend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.*;
@@ -14,17 +12,29 @@ import java.util.*;
 @Table(name = "Users")
 public class User {
     @Id
+    @Getter
+    @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
+    @Setter
     private String username;
 
+    @Getter
+    @Setter
     private String email;
 
+    @Getter
+    @Setter
     private String password;
 
+    @Getter
+    @Setter
     private String role = "PARENT";
 
+    @Getter
+    @Setter
     private String friendlyName= "Rodzic";
 
     public User(String username, String email, String password) {
