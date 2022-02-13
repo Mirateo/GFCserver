@@ -12,9 +12,13 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "FamilyRelations")
 public class FamilyRelation {
+    @Id
     @Getter
     @Setter
-    @Id
+    private Long relationId;
+
+    @Getter
+    @Setter
     @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="id")
     private User parentId;
