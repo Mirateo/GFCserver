@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Relationship")
-public class FamilyRelation {
+public class Relationship {
     @Id
     @Getter
     @Setter
@@ -20,11 +20,11 @@ public class FamilyRelation {
     @Getter
     @Setter
     @OneToOne(fetch=FetchType.LAZY)
-    private User parentId;
+    private User parent;
 
     @Getter
     @Setter
     @OneToMany(fetch=FetchType.LAZY)
-    private List<User> childrenId;
+    private List<User> children;
 
 }
