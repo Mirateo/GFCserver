@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Data
@@ -13,13 +14,15 @@ import javax.validation.constraints.NotNull;
 public class FamilyRelation {
     @Getter
     @Setter
-    @OneToOne
     @Id
-    private User userId;
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="id")
+    private User parentId;
 
     @Getter
     @Setter
-    @ManyToOne
-    private User childrenId;
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name="id")
+    private List<User> childrenId;
 
 }
