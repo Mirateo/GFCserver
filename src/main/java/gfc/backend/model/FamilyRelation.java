@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "FamilyRelations")
+@Table(name = "Relationship")
 public class FamilyRelation {
     @Id
     @Getter
@@ -20,13 +20,11 @@ public class FamilyRelation {
     @Getter
     @Setter
     @OneToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="id")
     private User parentId;
 
     @Getter
     @Setter
     @OneToMany(fetch=FetchType.LAZY)
-    @JoinColumn(name="id")
     private List<User> childrenId;
 
 }
