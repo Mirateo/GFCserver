@@ -36,12 +36,13 @@ public class User {
 
     @Getter
     @Setter
-    private String friendlyName= "Rodzic";
+    private String friendlyName;
 
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.friendlyName = "Rodzic";
     }
 
     public User(String username, String email, String password, String role, String friendlyName) {
