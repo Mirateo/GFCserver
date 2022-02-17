@@ -59,4 +59,14 @@ public class SignupChildRequest {
         this.email = email;
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        return "SignupChildRequest{" +
+                "username='" + username + '\'' +
+                ", friendlyName='" + friendlyName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
