@@ -46,8 +46,6 @@ public class FamilyController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addChild(@Valid @RequestBody SignupChildRequest request) {
-        System.out.println(request.toString());
-
         if(userRepository.existsByUsername(request.getUsername())){
             return ResponseEntity.badRequest().body("Błąd: Nazwa użytkownika zajęta!");
         }
@@ -59,7 +57,9 @@ public class FamilyController {
 
 
     @PostMapping("/remove/{id}")
-    public ResponseEntity<?> removeChild(@PathVariable(value = "id", required = true)  String id) {
+    public ResponseEntity<?> removeChild(@PathVariable(value = "id")  String id) {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + id);
+
         Optional<User> user = userRepository.findById(Long.getLong(id));
         if(user.isEmpty()){
             return ResponseEntity.badRequest().body("Błąd: Członek rodziny nie istnieje!");
