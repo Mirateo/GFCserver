@@ -60,7 +60,7 @@ public class FamilyController {
     public ResponseEntity<?> removeChild(@PathVariable(value = "id")  String id) {
         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + id);
 
-        Optional<User> user = userRepository.findById(Long.getLong(id));
+        Optional<User> user = userRepository.findById(Long.parseLong(id));
         if(user.isEmpty()){
             return ResponseEntity.badRequest().body("Błąd: Członek rodziny nie istnieje!");
         }
