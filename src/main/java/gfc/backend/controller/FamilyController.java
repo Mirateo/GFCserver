@@ -59,7 +59,7 @@ public class FamilyController {
 
 
     @PostMapping("/remove/{id}")
-    public ResponseEntity<?> removeChild(@PathVariable String id) {
+    public ResponseEntity<?> removeChild(@PathVariable(value = "id", required = true)  String id) {
         Optional<User> user = userRepository.findById(Long.getLong(id));
         if(user.isEmpty()){
             return ResponseEntity.badRequest().body("Błąd: Członek rodziny nie istnieje!");
