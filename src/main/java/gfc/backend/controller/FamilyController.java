@@ -46,6 +46,8 @@ public class FamilyController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addChild(SignupChildRequest request) {
+        System.out.println(request.toString());
+
         if(userRepository.existsByUsername(request.getUsername())){
             return ResponseEntity.badRequest().body("Błąd: Nazwa użytkownika zajęta!");
         }
