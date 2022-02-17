@@ -45,7 +45,7 @@ public class FamilyController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<?> addChild(SignupChildRequest request) {
+    public ResponseEntity<?> addChild(@Valid @RequestBody SignupChildRequest request) {
         System.out.println(request.toString());
 
         if(userRepository.existsByUsername(request.getUsername())){
