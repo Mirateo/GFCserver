@@ -12,6 +12,7 @@ public class TaskDTO {
     private String description;
     private Long points;
     private Boolean repeatable;
+    private Boolean own = false;
 
     public Long getOwnerId() {
         return ownerId;
@@ -51,6 +52,14 @@ public class TaskDTO {
 
     public void setRepeatable(Boolean repeatable) {
         this.repeatable = repeatable;
+    }
+
+    public Boolean getOwn() {
+        return own;
+    }
+
+    public void setOwn(Boolean own) {
+        this.own = own;
     }
 
     @Override

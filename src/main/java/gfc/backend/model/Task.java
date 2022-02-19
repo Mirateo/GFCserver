@@ -27,11 +27,14 @@ public class Task {
 
     private Long points;
 
+    private Boolean own = false;
+
     public Task(TaskDTO newTask) {
         this.ownerId = newTask.getOwnerId();
         this.name = newTask.getName();
         this.description = newTask.getDescription();
         this.points = newTask.getPoints();
+        this.own = newTask.getOwn();
     }
 
     public Task(RepeatableTask editedTask) {

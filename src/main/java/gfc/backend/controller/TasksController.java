@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,6 +25,17 @@ public class TasksController {
     private final TasksService tasksService;
     UserRepository userRepository;
 
+    private ResponseEntity<?> generateResponse(Long response) {
+        if (response == -2) {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+        else if (response == -1) {
+            return new ResponseEntity<>("Task doesn't exist", HttpStatus.BAD_REQUEST);
+        }
+        else {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+    }
 
     @GetMapping("/all")
     ResponseEntity<?> getAllUserTasks() {
@@ -61,18 +74,6 @@ public class TasksController {
         return tasksService.editReTask(editedTask);
     }
 
-    private ResponseEntity<?> generateResponse(Long response) {
-        if (response == -2) {
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
-        }
-        else if (response == -1) {
-            return new ResponseEntity<>("Task doesn't exist", HttpStatus.BAD_REQUEST);
-        }
-        else {
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-    }
-
     @GetMapping("/remove/{id}")
     public ResponseEntity<?> removeTask(@PathVariable Long id) {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -97,4 +98,25 @@ public class TasksController {
         return generateResponse(tasksService.taskUndone(id, userRepository.findByUsername(username).get().getId()));
 
     }
+
+
+    @GetMapping("/")
+    ResponseEntity<?> getFamilyTasks() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isEmpty())
+            return ResponseEntity.badRequest().body("User doesn't exist!");
+
+        Iterable<User> family = userRepository.findByEmail(user.get().getEmail());
+
+        List<Task> tasksList = new ArrayList<>();
+
+        family.forEach(member -> tasksList.addAll(tasksService.getAllUserTasks(member.getId())));
+
+        return new ResponseEntity<>(tasksList, HttpStatus.OK);
+    }
+
+
+
 }
