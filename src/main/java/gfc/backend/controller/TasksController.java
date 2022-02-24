@@ -100,7 +100,7 @@ public class TasksController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping("/full")
     ResponseEntity<?> getFamilyTasks() {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> user = userRepository.findByUsername(username);
@@ -113,6 +113,24 @@ public class TasksController {
         List<Task> tasksList = new ArrayList<>();
 
         family.forEach(member -> tasksList.addAll(tasksService.getAllUserTasks(member.getId())));
+
+        return new ResponseEntity<>(tasksList, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/fullRe")
+    ResponseEntity<?> getFamilyReTasks() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isEmpty())
+            return ResponseEntity.badRequest().body("User doesn't exist!");
+
+        Iterable<User> family = userRepository.findByEmail(user.get().getEmail());
+
+        List<RepeatableTask> tasksList = new ArrayList<>();
+
+        family.forEach(member -> tasksList.addAll(tasksService.getAllUserRepeatableTasks(member.getId())));
 
         return new ResponseEntity<>(tasksList, HttpStatus.OK);
     }
