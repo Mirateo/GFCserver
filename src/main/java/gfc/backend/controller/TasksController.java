@@ -79,23 +79,17 @@ public class TasksController {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userRepository.findByUsername(username).isEmpty())
             return new ResponseEntity<>("User doesn't exist", HttpStatus.UNAUTHORIZED);
-        return generateResponse(tasksService.removeTask(id, userRepository.findByUsername(username).get().getId()));
+        return generateResponse(tasksService.removeTask(id));
     }
 
     @GetMapping("/done/{id}")
     public ResponseEntity<?> taskDone(@PathVariable Long id) {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userRepository.findByUsername(username).isEmpty())
-            return new ResponseEntity<>("User doesn't exist", HttpStatus.UNAUTHORIZED);
-        return generateResponse(tasksService.taskDone(id, userRepository.findByUsername(username).get().getId()));
+        return generateResponse(tasksService.taskDone(id));
     }
 
     @GetMapping("/undone/{id}")
     public ResponseEntity<?> taskUndone(@PathVariable Long id) {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userRepository.findByUsername(username).isEmpty())
-            return new ResponseEntity<>("User doesn't exist", HttpStatus.UNAUTHORIZED);
-        return generateResponse(tasksService.taskUndone(id, userRepository.findByUsername(username).get().getId()));
+        return generateResponse(tasksService.taskUndone(id));
 
     }
 
