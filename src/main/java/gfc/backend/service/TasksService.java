@@ -73,7 +73,7 @@ public class TasksService {
     }
 
     public Long taskDone(Long id) {
-        if (tasksRepository.existsById(id)) {
+        if (tasksRepository.findById(id).isPresent()) {
             tasksRepository.deleteById(id);
             return 0L;
         }
