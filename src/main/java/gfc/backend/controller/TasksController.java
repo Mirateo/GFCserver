@@ -76,9 +76,6 @@ public class TasksController {
 
     @GetMapping("/remove/{id}")
     public ResponseEntity<?> removeTask(@PathVariable Long id) {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userRepository.findByUsername(username).isEmpty())
-            return new ResponseEntity<>("User doesn't exist", HttpStatus.UNAUTHORIZED);
         return generateResponse(tasksService.removeTask(id));
     }
 

@@ -38,6 +38,10 @@ public class User {
     @Setter
     private String friendlyName;
 
+    @Getter
+    @Setter
+    private Long points = 0L;
+
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
