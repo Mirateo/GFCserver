@@ -5,14 +5,14 @@ import gfc.backend.model.RepeatableTask;
 import gfc.backend.model.Task;
 import gfc.backend.repository.RepeatableTaskRepository;
 import gfc.backend.repository.TasksRepository;
-import gfc.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.AbstractMap;
+import java.util.Map.Entry;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -72,27 +72,31 @@ public class TasksService {
         return -1L;
     }
 
-    public Long taskDone(Long id) {
+    public Entry<Long, Long> taskDone(Long id) {
         if (tasksRepository.findById(id).isPresent()) {
+            Task task = tasksRepository.findById(id).get();
             tasksRepository.deleteById(id);
-            return 0L;
+
+            return new AbstractMap.SimpleEntry<Long, Long>(task.getOwnerId(), task.getPoints());
         }
         if (repeatableTaskRepository.findById(id).isPresent()) {
             RepeatableTask task = repeatableTaskRepository.findById(id).get();
             task.setLastDone(new Date(System.currentTimeMillis()));
             repeatableTaskRepository.save(task);
-            return 0L;
+
+            return new AbstractMap.SimpleEntry<>(task.getOwnerId(), task.getPoints());
         }
-        return -1L;
+        return null;
     }
 
-    public Long taskUndone(Long id) {
+    public Entry<Long, Long> taskUndone(Long id) {
         if (repeatableTaskRepository.findById(id).isPresent()) {
             RepeatableTask task = repeatableTaskRepository.findById(id).get();
             task.setLastDone(new Date(System.currentTimeMillis()- 24*60*60*1000));
             repeatableTaskRepository.save(task);
-            return 0L;
+
+            return new AbstractMap.SimpleEntry<>(task.getOwnerId(), task.getPoints());
         }
-        return -1L;
+        return null;
     }
 }

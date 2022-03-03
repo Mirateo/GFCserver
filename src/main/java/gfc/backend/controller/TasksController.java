@@ -5,6 +5,7 @@ import gfc.backend.model.RepeatableTask;
 import gfc.backend.model.Task;
 import gfc.backend.model.User;
 import gfc.backend.repository.UserRepository;
+import gfc.backend.service.FamilyService;
 import gfc.backend.service.TasksService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.AbstractMap;
+import java.util.Map.Entry;
 
 @RestController
 @RequestMapping("/tasks")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class TasksController {
-    private final TasksService tasksService;
     UserRepository userRepository;
+    private final FamilyService familyService;
+    private final TasksService tasksService;
 
     private ResponseEntity<?> generateResponse(Long response) {
         if (response == -2) {
@@ -81,13 +85,22 @@ public class TasksController {
 
     @GetMapping("/done/{id}")
     public ResponseEntity<?> taskDone(@PathVariable Long id) {
-        return generateResponse(tasksService.taskDone(id));
+        Entry<Long, Long> response = tasksService.taskDone(id);
+        if (response == null) {
+            return ResponseEntity.badRequest().body("Task doesn't exist");
+        }
+
+        return familyService.addPoints(response.getKey(), response.getValue());
     }
 
     @GetMapping("/undone/{id}")
     public ResponseEntity<?> taskUndone(@PathVariable Long id) {
-        return generateResponse(tasksService.taskUndone(id));
+        Entry<Long, Long> response = tasksService.taskUndone(id);
+        if (response == null) {
+            return ResponseEntity.badRequest().body("Task doesn't exist");
+        }
 
+        return familyService.addPoints(response.getKey(), -(response.getValue()));
     }
 
 
