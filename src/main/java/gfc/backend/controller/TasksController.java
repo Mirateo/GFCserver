@@ -101,8 +101,10 @@ public class TasksController {
         }
 
         task.setPoints(-task.getPoints());
+        ResponseEntity<?>ret = familyService.addPoints(new AbstractMap.SimpleEntry<>(task, null));
+        task.setPoints(-task.getPoints());
 
-        return familyService.addPoints(new AbstractMap.SimpleEntry<>(task, null));
+        return ret;
     }
 
 
