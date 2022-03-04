@@ -66,8 +66,10 @@ public class FamilyService {
         if(user.isEmpty()){
             return ResponseEntity.badRequest().body("Błąd: Członek rodziny nie istnieje!");
         }
-        user.get().setPoints(user.get().getPoints() + points);
+        User justUser = user.get();
+        justUser.setPoints(justUser.getPoints() + points);
+        userRepository.save(justUser);
 
-        return ResponseEntity.ok().body(user.get().getPoints());
+        return ResponseEntity.ok().body(justUser.getPoints());
     }
 }
