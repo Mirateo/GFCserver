@@ -72,30 +72,30 @@ public class TasksService {
         return -1L;
     }
 
-    public Entry<Long, Long> taskDone(Long id) {
+    public Entry<RepeatableTask, Task> taskDone(Long id) {
         if (tasksRepository.findById(id).isPresent()) {
             Task task = tasksRepository.findById(id).get();
             tasksRepository.deleteById(id);
 
-            return new AbstractMap.SimpleEntry<Long, Long>(task.getOwnerId(), task.getPoints());
+            return new AbstractMap.SimpleEntry<RepeatableTask, Task>(null, task);
         }
         if (repeatableTaskRepository.findById(id).isPresent()) {
             RepeatableTask task = repeatableTaskRepository.findById(id).get();
             task.setLastDone(new Date(System.currentTimeMillis()));
             repeatableTaskRepository.save(task);
 
-            return new AbstractMap.SimpleEntry<>(task.getOwnerId(), task.getPoints());
+            return new AbstractMap.SimpleEntry<RepeatableTask, Task>(task, null);
         }
         return null;
     }
 
-    public Entry<Long, Long> taskUndone(Long id) {
+    public RepeatableTask taskUndone(Long id) {
         if (repeatableTaskRepository.findById(id).isPresent()) {
             RepeatableTask task = repeatableTaskRepository.findById(id).get();
             task.setLastDone(new Date(System.currentTimeMillis()- 24*60*60*1000));
             repeatableTaskRepository.save(task);
 
-            return new AbstractMap.SimpleEntry<>(task.getOwnerId(), task.getPoints());
+            return task;
         }
         return null;
     }

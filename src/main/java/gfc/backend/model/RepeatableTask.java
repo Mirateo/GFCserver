@@ -35,6 +35,8 @@ public class RepeatableTask {
     @Nullable
     private Date lastDone;
 
+    private Boolean own = true;
+
 
     public RepeatableTask(TaskDTO newTask) {
         this.ownerId = newTask.getOwnerId();
@@ -42,6 +44,7 @@ public class RepeatableTask {
         this.description = newTask.getDescription();
         this.points = newTask.getPoints();
         this.lastDone = null;
+        this.own = newTask.getOwn();
     }
 
     public RepeatableTask(RepeatableTask editedTask) {
@@ -51,5 +54,6 @@ public class RepeatableTask {
         this.description = editedTask.getDescription();
         this.points = editedTask.getPoints();
         this.lastDone = editedTask.getLastDone();
+        this.own = editedTask.getOwn();
     }
 }

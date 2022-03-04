@@ -1,6 +1,8 @@
 package gfc.backend.service;
 
 import gfc.backend.dto.SignupChildRequest;
+import gfc.backend.model.RepeatableTask;
+import gfc.backend.model.Task;
 import gfc.backend.model.User;
 import gfc.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -61,12 +64,32 @@ public class FamilyService {
         return ResponseEntity.ok("Członek rodziny usunięty pomyślnie!");
     }
 
-    public ResponseEntity<?> addPoints(Long userId, Long points) {
-        Optional<User> user = userRepository.findById(userId);
+    public ResponseEntity<?> addPoints(Map.Entry<RepeatableTask, Task> tasks) {
+        Long ownerId;
+        Long points;
+        Boolean ifOwn;
+
+        if (tasks.getKey() == null) {
+            ownerId = tasks.getValue().getOwnerId();
+            points = tasks.getValue().getPoints();
+            ifOwn = tasks.getValue().getOwn();
+        }
+        else {
+            ownerId = tasks.getKey().getOwnerId();
+            points = tasks.getKey().getPoints();
+            ifOwn = tasks.getKey().getOwn();
+        }
+
+
+        Optional<User> user = userRepository.findById(ownerId);
         if(user.isEmpty()){
             return ResponseEntity.badRequest().body("Błąd: Członek rodziny nie istnieje!");
         }
         User justUser = user.get();
+        if (ifOwn && justUser.getRole().equals("CHILD")){
+            return ResponseEntity.ok().body(justUser.getPoints());
+        }
+
         justUser.setPoints(justUser.getPoints() + points);
         userRepository.save(justUser);
 

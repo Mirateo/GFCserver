@@ -85,22 +85,24 @@ public class TasksController {
 
     @GetMapping("/done/{id}")
     public ResponseEntity<?> taskDone(@PathVariable Long id) {
-        Entry<Long, Long> response = tasksService.taskDone(id);
+        Entry<RepeatableTask, Task> response = tasksService.taskDone(id);
         if (response == null) {
             return ResponseEntity.badRequest().body("Task doesn't exist");
         }
 
-        return familyService.addPoints(response.getKey(), response.getValue());
+        return familyService.addPoints(response);
     }
 
     @GetMapping("/undone/{id}")
     public ResponseEntity<?> taskUndone(@PathVariable Long id) {
-        Entry<Long, Long> response = tasksService.taskUndone(id);
-        if (response == null) {
+        RepeatableTask task = tasksService.taskUndone(id);
+        if (task == null) {
             return ResponseEntity.badRequest().body("Task doesn't exist");
         }
 
-        return familyService.addPoints(response.getKey(), -(response.getValue()));
+        task.setPoints(-task.getPoints());
+
+        return familyService.addPoints(new AbstractMap.SimpleEntry<>(task, null));
     }
 
 
