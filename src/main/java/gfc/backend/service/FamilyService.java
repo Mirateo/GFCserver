@@ -69,36 +69,29 @@ public class FamilyService {
         Long points;
         Boolean ifOwn;
 
-        System.out.println("ready");
 
         if (tasks.getKey() == null) {
             ownerId = tasks.getValue().getOwnerId();
             points = tasks.getValue().getPoints();
             ifOwn = tasks.getValue().getOwn();
 
-            System.out.println("go1: " + ownerId.toString() + ":" + points.toString() + ":" + ifOwn.toString());
         }
         else {
             ownerId = tasks.getKey().getOwnerId();
             points = tasks.getKey().getPoints();
             ifOwn = tasks.getKey().getOwn();
-            System.out.println("go2: " + ownerId.toString() + ":" + points.toString() + ":" + ifOwn.toString());
         }
 
 
         Optional<User> user = userRepository.findById(ownerId);
-        System.out.println("ready2");
         if(user.isEmpty()){
             return ResponseEntity.badRequest().body("Błąd: Członek rodziny nie istnieje!");
         }
         User justUser = user.get();
         if (ifOwn && justUser.getRole().equals("CHILD")){
-            System.out.println("go3: " + ifOwn.toString() + ":" + justUser.getRole());
             return ResponseEntity.ok().body(justUser.getPoints());
         }
 
-        System.out.println("go4: " + justUser.getPoints().toString() + ":" +  points.toString() );
-        System.out.println("sum=" + ((Long)(justUser.getPoints() + points)).toString());
         justUser.setPoints(justUser.getPoints() + points);
         userRepository.save(justUser);
 
