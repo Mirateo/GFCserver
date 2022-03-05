@@ -1,8 +1,12 @@
 package gfc.backend.model;
 
+import gfc.backend.dto.RewardDTO;
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 @Entity
 @Data
@@ -14,27 +18,44 @@ public class Reward {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     @Setter
+    @NotNull
     Long rewardId;
 
     @Getter
     @Setter
+    @NotNull
     String title;
 
     @Getter
     @Setter
+    @Nullable
     String description;
 
     @Getter
     @Setter
     @ManyToOne
+    @NotNull
     User reporter;
 
     @Getter
     @Setter
     @ManyToOne
+    @NotNull
     User owner;
 
     @Getter
     @Setter
-    Boolean chosen;
+    Boolean chosen = false;
+
+    @Getter
+    @Setter
+    @NotNull
+    Long points = 0L;
+
+    public Reward(@NotNull String title, @Nullable String description, Boolean chosen, Long points) {
+        this.title = title;
+        this.description = description;
+        this.chosen = chosen;
+        this.points = points;
+    }
 }
