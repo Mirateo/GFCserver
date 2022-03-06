@@ -23,7 +23,7 @@ public class RewardDTO {
 
     @Getter
     @Setter
-    @NotNull
+    @Nullable
     Long reporter;
 
     @Getter

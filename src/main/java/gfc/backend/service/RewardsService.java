@@ -53,8 +53,23 @@ public class RewardsService {
 
         Reward reward = new Reward(rewardDto.getTitle(), rewardDto.getDescription(), rewardDto.getChosen(), rewardDto.getPoints());
 
-        reward.setOwner(userRepository.findById(rewardDto.getOwner()).get());
-        reward.setReporter(userRepository.findById(rewardDto.getReporter()).get());
+
+        User child = userRepository.findById(rewardDto.getOwner()).get();
+        reward.setOwner(child);
+
+        if (rewardDto.getReporter() == null) {
+            User parent = new User();
+            Iterator<User> iterator = userRepository.findByEmail(child.getEmail()).iterator();
+            while(iterator.hasNext()) {
+                parent = iterator.next();
+                if (parent.getRole().equals("PARENT")) {
+                    break;
+                }
+            }
+            reward.setReporter(parent);
+        } else {
+            reward.setReporter(userRepository.findById(rewardDto.getReporter()).get());
+        }
 
         rewardsRepository.save(reward);
         return reward.getRewardId();
