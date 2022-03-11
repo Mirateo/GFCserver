@@ -42,6 +42,7 @@ public class RewardsService {
     }
 
     public Long add(RewardDTO rewardDto, String username) {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + rewardDto.toString());
         Optional<User> requesterOpt = userRepository.findByUsername(username);
         if (requesterOpt.isEmpty()){
             return null;
