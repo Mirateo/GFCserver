@@ -71,7 +71,6 @@ public class RewardsService {
     }
 
     public Long edit(Reward reward) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + reward.toString());
         return rewardsRepository.save(reward).getRewardId();
     }
 

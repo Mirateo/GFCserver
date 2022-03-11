@@ -96,6 +96,8 @@ public class RewardsController {
 
     @PostMapping("/delete/{id}")
     ResponseEntity<?> deleteReward(@PathVariable Long id) {
+
+
         Long resp = rewardsService.delete(id);
 
         if(resp != null) {
