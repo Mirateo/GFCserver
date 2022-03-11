@@ -42,7 +42,6 @@ public class RewardsService {
     }
 
     public Long add(RewardDTO rewardDto, String username) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + rewardDto.toString());
         Optional<User> requesterOpt = userRepository.findByUsername(username);
         if (requesterOpt.isEmpty()){
             return null;
@@ -72,6 +71,7 @@ public class RewardsService {
     }
 
     public Long edit(Reward reward) {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + reward.toString());
         return rewardsRepository.save(reward).getRewardId();
     }
 

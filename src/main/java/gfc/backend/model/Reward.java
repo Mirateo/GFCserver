@@ -67,4 +67,17 @@ public class Reward {
         this.chosen = chosen;
         this.points = points;
     }
+
+    @Override
+    public String toString() {
+        return "Reward{" +
+                "rewardId=" + rewardId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", reporter=" + reporter +
+                ", owner=" + owner +
+                ", chosen=" + chosen +
+                ", points=" + points +
+                '}';
+    }
 }
