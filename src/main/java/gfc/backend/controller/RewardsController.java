@@ -37,7 +37,7 @@ public class RewardsController {
 
 
     @PostMapping("/add")
-    ResponseEntity<?> addReward(RewardDTO reward) {
+    ResponseEntity<?> addReward(@RequestBody RewardDTO reward) {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Long resp = rewardsService.add(reward, username);
@@ -50,7 +50,7 @@ public class RewardsController {
     }
 
     @PostMapping("/edit")
-    ResponseEntity<?> editReward(Reward reward) {
+    ResponseEntity<?> editReward(@RequestBody Reward reward) {
         Long resp = rewardsService.edit(reward);
 
         if (resp != null) {
