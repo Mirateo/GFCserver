@@ -40,4 +40,16 @@ public class RewardDTO {
     @Setter
     @NotNull
     Long points = 0L;
+
+    @Override
+    public String toString() {
+        return "RewardDTO{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", reporter=" + reporter +
+                ", owner=" + owner +
+                ", chosen=" + chosen +
+                ", points=" + points +
+                '}';
+    }
 }
