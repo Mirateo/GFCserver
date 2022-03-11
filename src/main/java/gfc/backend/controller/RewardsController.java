@@ -82,4 +82,28 @@ public class RewardsController {
         }
 
     }
+
+    @PostMapping("/unselect/{id}")
+    ResponseEntity<?> unSelectReward(@PathVariable Long id) {
+        Long resp = rewardsService.unselect(id);
+
+        if(resp != null) {
+            return ResponseEntity.ok(resp);
+        } else {
+            return ResponseEntity.badRequest().body("Przesłane dane niepoprawne.");
+        }
+    }
+
+    @PostMapping("/delete/{id}")
+    ResponseEntity<?> deleteReward(@PathVariable Long id) {
+        Long resp = rewardsService.delete(id);
+
+        if(resp != null) {
+            return ResponseEntity.ok(resp);
+        } else {
+            return ResponseEntity.badRequest().body("Przesłane dane niepoprawne.");
+        }
+    }
+
+
 }
