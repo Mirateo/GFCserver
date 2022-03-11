@@ -42,35 +42,30 @@ public class RewardsService {
     }
 
     public Long add(RewardDTO rewardDto, String username) {
-        if (! userRepository.existsByUsername(username)){
+        Optional<User> requesterOpt = userRepository.findByUsername(username);
+        if (requesterOpt.isEmpty()){
             return null;
         }
-        User requester = userRepository.findByUsername(username).get();
-
-        if(!rewardDto.getOwner().equals(requester.getId()) && !rewardDto.getOwner().equals(requester.getId())) {
-            return null;
-        }
-
-        Reward reward = new Reward(rewardDto.getTitle(), rewardDto.getDescription(), rewardDto.getChosen(), rewardDto.getPoints());
-
-
-        User child = userRepository.findById(rewardDto.getOwner()).get();
-        reward.setOwner(child);
+        User requester =  requesterOpt.get();
+        User reporter;
 
         if (rewardDto.getReporter() == null) {
             User parent = new User();
-            Iterator<User> iterator = userRepository.findByEmail(child.getEmail()).iterator();
-            while(iterator.hasNext()) {
-                parent = iterator.next();
+            for (User user : userRepository.findByEmail(requester.getEmail())) {
+                parent = user;
                 if (parent.getRole().equals("PARENT")) {
                     break;
                 }
             }
-            reward.setReporter(parent);
+            reporter = parent;
+
         } else {
-            reward.setReporter(userRepository.findById(rewardDto.getReporter()).get());
+            reporter = userRepository.findById(rewardDto.getReporter()).get();
         }
 
+        User owner = userRepository.findById(rewardDto.getOwner()).get();
+
+        Reward reward = new Reward(rewardDto.getTitle(), rewardDto.getDescription(), reporter, owner ,rewardDto.getChosen(), rewardDto.getPoints());
         rewardsRepository.save(reward);
         return reward.getRewardId();
     }

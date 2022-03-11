@@ -58,4 +58,13 @@ public class Reward {
         this.chosen = chosen;
         this.points = points;
     }
+
+    public Reward(String title, String description, User reporter, User owner, Boolean chosen, Long points) {
+        this.title = title;
+        this.description = description;
+        this.reporter = reporter;
+        this.owner = owner;
+        this.chosen = chosen;
+        this.points = points;
+    }
 }
