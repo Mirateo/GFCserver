@@ -18,7 +18,6 @@ public class Reward {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     @Setter
-    @NotNull
     Long rewardId;
 
     @Getter
