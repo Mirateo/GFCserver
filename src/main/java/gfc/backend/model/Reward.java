@@ -60,6 +60,7 @@ public class Reward {
     }
 
     public Reward(String title, String description, User reporter, User owner, Boolean chosen, Long points) {
+        super();
         this.title = title;
         this.description = description;
         this.reporter = reporter;
