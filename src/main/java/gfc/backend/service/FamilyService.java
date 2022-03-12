@@ -2,6 +2,7 @@ package gfc.backend.service;
 
 import gfc.backend.dto.SignupChildRequest;
 import gfc.backend.model.RepeatableTask;
+import gfc.backend.model.Reward;
 import gfc.backend.model.Task;
 import gfc.backend.model.User;
 import gfc.backend.repository.UserRepository;
@@ -69,7 +70,6 @@ public class FamilyService {
         Long points;
         Boolean ifOwn;
 
-
         if (tasks.getKey() == null) {
             ownerId = tasks.getValue().getOwnerId();
             points = tasks.getValue().getPoints();
@@ -96,5 +96,18 @@ public class FamilyService {
         userRepository.save(justUser);
 
         return ResponseEntity.ok().body(justUser.getPoints());
+    }
+
+    public ResponseEntity<?> payPoints(Reward reward) {
+        User owner = reward.getOwner();
+
+        if (owner == reward.getReporter() && owner.getRole().equals("CHILD")){
+            return ResponseEntity.ok().body(owner.getPoints());
+        }
+
+        owner.setPoints(owner.getPoints() - reward.getPoints());
+        userRepository.save(owner);
+
+        return ResponseEntity.ok().body(owner.getPoints());
     }
 }

@@ -22,6 +22,7 @@ import java.util.Optional;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class RewardsController {
     private final RewardsService rewardsService;
+    private final FamilyService familyService;
 
     @GetMapping("/")
     ResponseEntity<?> getRewards() {
@@ -62,12 +63,12 @@ public class RewardsController {
 
     @PostMapping("/select/{id}")
     ResponseEntity<?> selectReward(@PathVariable Long id) {
-        Long resp = rewardsService.select(id);
+        Reward resp = rewardsService.select(id);
 
-        if(resp != null) {
-            return ResponseEntity.ok(resp);
-        } else {
+        if(resp == null) {
             return ResponseEntity.badRequest().body("Przesłane dane niepoprawne.");
+        } else {
+            return familyService.payPoints(resp);
         }
     }
 
@@ -85,19 +86,20 @@ public class RewardsController {
 
     @PostMapping("/unselect/{id}")
     ResponseEntity<?> unSelectReward(@PathVariable Long id) {
-        Long resp = rewardsService.unselect(id);
+        Reward resp = rewardsService.unselect(id);
 
-        if(resp != null) {
-            return ResponseEntity.ok(resp);
-        } else {
+        if(resp == null) {
             return ResponseEntity.badRequest().body("Przesłane dane niepoprawne.");
+        } else {
+            resp.setPoints(-resp.getPoints());
+            ResponseEntity<?> ret = familyService.payPoints(resp);
+            resp.setPoints(-resp.getPoints());
+            return ret;
         }
     }
 
     @PostMapping("/delete/{id}")
     ResponseEntity<?> deleteReward(@PathVariable Long id) {
-
-
         Long resp = rewardsService.delete(id);
 
         if(resp != null) {

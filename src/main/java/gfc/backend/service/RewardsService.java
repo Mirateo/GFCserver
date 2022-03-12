@@ -74,7 +74,7 @@ public class RewardsService {
         return rewardsRepository.save(reward).getRewardId();
     }
 
-    public Long select(Long id) {
+    public Reward select(Long id) {
         Optional<Reward> optRew = rewardsRepository.findByRewardId(id);
         if (optRew.isEmpty()) {
             return null;
@@ -82,9 +82,10 @@ public class RewardsService {
         Reward reward = optRew.get();
         if(reward.getPoints() < reward.getOwner().getPoints()) {
             reward.setChosen(true);
-            return rewardsRepository.save(reward).getRewardId();
+            rewardsRepository.save(reward);
+            return reward;
         }
-        return 0L;
+        return null;
     }
 
     public Long accept(Long id) {
@@ -97,7 +98,7 @@ public class RewardsService {
         return 0L;
     }
 
-    public Long unselect(Long id) {
+    public Reward unselect(Long id) {
         Optional<Reward> optRew = rewardsRepository.findByRewardId(id);
         if (optRew.isEmpty()) {
             return null;
@@ -105,7 +106,7 @@ public class RewardsService {
         Reward reward = optRew.get();
         reward.getOwner().setPoints(reward.getOwner().getPoints() + reward.getPoints());
         reward.setChosen(false);
-        return rewardsRepository.save(reward).getRewardId();
+        return reward;
     }
 
     public Long delete(Long id) {
