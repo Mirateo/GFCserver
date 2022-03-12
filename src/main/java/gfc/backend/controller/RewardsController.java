@@ -94,6 +94,7 @@ public class RewardsController {
             resp.setPoints(-resp.getPoints());
             ResponseEntity<?> ret = familyService.payPoints(resp);
             resp.setPoints(-resp.getPoints());
+            rewardsService.edit(resp);
             return ret;
         }
     }
