@@ -66,7 +66,7 @@ public class RewardsController {
         Reward resp = rewardsService.select(id);
 
         if(resp == null) {
-            return ResponseEntity.badRequest().body(-1L);
+            return ResponseEntity.ok().body(-1L);
         } else {
             return familyService.payPoints(resp);
         }
