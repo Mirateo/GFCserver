@@ -105,9 +105,6 @@ public class FamilyService {
             return ResponseEntity.ok().body(owner.getPoints());
         }
 
-        if (owner.getPoints() < reward.getPoints()) {
-            return ResponseEntity.ok().body(-1L);
-        }
 
         owner.setPoints(owner.getPoints() - reward.getPoints());
         userRepository.save(owner);

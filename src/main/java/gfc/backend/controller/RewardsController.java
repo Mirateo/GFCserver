@@ -66,7 +66,7 @@ public class RewardsController {
         Reward resp = rewardsService.select(id);
 
         if(resp == null) {
-            return ResponseEntity.badRequest().body("Przesłane dane niepoprawne.");
+            return ResponseEntity.badRequest().body(-1L);
         } else {
             return familyService.payPoints(resp);
         }
