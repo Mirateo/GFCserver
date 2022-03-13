@@ -68,7 +68,7 @@ public class RewardsController {
         if(resp == null) {
             return ResponseEntity.ok().body(-1L);
         } else {
-            return familyService.payPoints(resp);
+            return familyService.payPoints(resp, 1);
         }
     }
 
@@ -91,11 +91,7 @@ public class RewardsController {
         if(resp == null) {
             return ResponseEntity.badRequest().body("Przesłane dane niepoprawne.");
         } else {
-            resp.setPoints(-resp.getPoints());
-            ResponseEntity<?> ret = familyService.payPoints(resp);
-            resp.setPoints(-resp.getPoints());
-            rewardsService.edit(resp);
-            return ret;
+            return familyService.payPoints(resp, -1);
         }
     }
 

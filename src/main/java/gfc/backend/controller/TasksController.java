@@ -90,7 +90,7 @@ public class TasksController {
             return ResponseEntity.badRequest().body("Task doesn't exist");
         }
 
-        return familyService.addPoints(response);
+        return familyService.addPoints(response, 1);
     }
 
     @GetMapping("/undone/{id}")
@@ -99,10 +99,7 @@ public class TasksController {
         if (task == null) {
             return ResponseEntity.badRequest().body("Task doesn't exist");
         }
-
-        task.setPoints(-task.getPoints());
-        ResponseEntity<?>ret = familyService.addPoints(new AbstractMap.SimpleEntry<>(task, null));
-        task.setPoints(-task.getPoints());
+        ResponseEntity<?>ret = familyService.addPoints(new AbstractMap.SimpleEntry<>(task, null), -1);
 
         return ret;
     }

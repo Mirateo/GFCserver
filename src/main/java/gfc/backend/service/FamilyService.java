@@ -65,7 +65,7 @@ public class FamilyService {
         return ResponseEntity.ok("Członek rodziny usunięty pomyślnie!");
     }
 
-    public ResponseEntity<?> addPoints(Map.Entry<RepeatableTask, Task> tasks) {
+    public ResponseEntity<?> addPoints(Map.Entry<RepeatableTask, Task> tasks, Integer multiplier) {
         Long ownerId;
         Long points;
         Boolean ifOwn;
@@ -82,7 +82,6 @@ public class FamilyService {
             ifOwn = tasks.getKey().getOwn();
         }
 
-
         Optional<User> user = userRepository.findById(ownerId);
         if(user.isEmpty()){
             return ResponseEntity.badRequest().body("Błąd: Członek rodziny nie istnieje!");
@@ -92,13 +91,13 @@ public class FamilyService {
             return ResponseEntity.ok().body(justUser.getPoints());
         }
 
-        justUser.setPoints(justUser.getPoints() + points);
+        justUser.setPoints(justUser.getPoints() + multiplier * points);
         userRepository.save(justUser);
 
         return ResponseEntity.ok().body(justUser.getPoints());
     }
 
-    public ResponseEntity<?> payPoints(Reward reward) {
+    public ResponseEntity<?> payPoints(Reward reward, Integer multiplier) {
         User owner = reward.getOwner();
 
         if (owner == reward.getReporter() && owner.getRole().equals("CHILD")){
@@ -106,7 +105,7 @@ public class FamilyService {
         }
 
 
-        owner.setPoints(owner.getPoints() - reward.getPoints());
+        owner.setPoints(owner.getPoints() - reward.getPoints() * multiplier);
         userRepository.save(owner);
 
         return ResponseEntity.ok().body(owner.getPoints());
