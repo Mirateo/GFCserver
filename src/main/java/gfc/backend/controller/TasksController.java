@@ -1,6 +1,7 @@
 package gfc.backend.controller;
 
 import gfc.backend.dto.TaskDTO;
+import gfc.backend.model.DoneTask;
 import gfc.backend.model.RepeatableTask;
 import gfc.backend.model.Task;
 import gfc.backend.model.User;
@@ -150,7 +151,7 @@ public class TasksController {
 
         Iterable<User> family = userRepository.findByEmail(user.get().getEmail());
 
-        List<Task> tasksList = new ArrayList<>();
+        List<DoneTask> tasksList = new ArrayList<>();
 
         family.forEach(member -> tasksList.addAll(tasksService.getAllUserDoneTasks(member.getId())));
 
