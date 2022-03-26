@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface DoneTasksRepository extends CrudRepository<DoneTask, Long> {
-
+    List<DoneTask> findAllByOwnerId(Long id);
 }

@@ -95,8 +95,8 @@ public class TasksService {
         return null;
     }
 
-    public Collection<? extends Task> getAllUserDoneTasks(Long id) {
-        return tasksRepository.findAllByOwnerId(id);
+    public List<DoneTask> getAllUserDoneTasks(Long id) {
+        return doneTasksRepository.findAllByOwnerId(id);
     }
 
     public RepeatableTask taskUndone(Long id) {
