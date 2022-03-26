@@ -1,8 +1,10 @@
 package gfc.backend.service;
 
 import gfc.backend.dto.TaskDTO;
+import gfc.backend.model.DoneTask;
 import gfc.backend.model.RepeatableTask;
 import gfc.backend.model.Task;
+import gfc.backend.repository.DoneTasksRepository;
 import gfc.backend.repository.RepeatableTaskRepository;
 import gfc.backend.repository.TasksRepository;
 import lombok.AllArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.util.Collection;
 import java.util.List;
 import java.util.AbstractMap;
 import java.util.Map.Entry;
@@ -18,6 +21,7 @@ import java.util.Map.Entry;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class TasksService {
     TasksRepository tasksRepository;
+    DoneTasksRepository doneTasksRepository;
     RepeatableTaskRepository repeatableTaskRepository;
 
     public List<Task> getAllUserTasks(Long ownerId) {
@@ -76,6 +80,7 @@ public class TasksService {
         if (tasksRepository.findById(id).isPresent()) {
             Task task = tasksRepository.findById(id).get();
             tasksRepository.deleteById(id);
+            doneTasksRepository.save(new DoneTask(task));
 
             return new AbstractMap.SimpleEntry<RepeatableTask, Task>(null, task);
         }
@@ -87,6 +92,10 @@ public class TasksService {
             return new AbstractMap.SimpleEntry<RepeatableTask, Task>(task, null);
         }
         return null;
+    }
+
+    public Collection<? extends Task> getAllUserDoneTasks(Long id) {
+        return tasksRepository.findAllByOwnerId(id);
     }
 
     public RepeatableTask taskUndone(Long id) {

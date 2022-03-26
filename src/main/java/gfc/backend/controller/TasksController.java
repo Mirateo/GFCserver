@@ -140,6 +140,32 @@ public class TasksController {
         return new ResponseEntity<>(tasksList, HttpStatus.OK);
     }
 
+    @GetMapping("/fullDone")
+    ResponseEntity<?> getFamilyDoneTasks() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isEmpty())
+            return ResponseEntity.badRequest().body("User doesn't exist!");
+
+        Iterable<User> family = userRepository.findByEmail(user.get().getEmail());
+
+        List<Task> tasksList = new ArrayList<>();
+
+        family.forEach(member -> tasksList.addAll(tasksService.getAllUserDoneTasks(member.getId())));
+
+        return new ResponseEntity<>(tasksList, HttpStatus.OK);
+    }
 
 
+    @GetMapping("/allDone")
+    ResponseEntity<?> getAllUserDoneTasks() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isEmpty())
+            return ResponseEntity.badRequest().body("User doesn't exist!");
+
+        return new ResponseEntity<>(tasksService.getAllUserDoneTasks(user.get().getId()), HttpStatus.OK);
+    }
 }
