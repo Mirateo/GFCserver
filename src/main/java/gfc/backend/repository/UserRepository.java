@@ -17,7 +17,4 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Iterable<User> findByEmail(String email);
 
     Optional<User> findById(Long id);
-
-    Boolean existsByUsername(Long id);
-
 }

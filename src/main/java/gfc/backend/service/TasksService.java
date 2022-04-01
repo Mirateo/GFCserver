@@ -82,7 +82,6 @@ public class TasksService {
             DoneTask done = new DoneTask(task);
             tasksRepository.deleteById(id);
             doneTasksRepository.save(done);
-            System.out.println(done);
             return new AbstractMap.SimpleEntry<RepeatableTask, Task>(null, task);
         }
         if (repeatableTaskRepository.findById(id).isPresent()) {

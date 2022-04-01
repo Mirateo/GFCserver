@@ -74,7 +74,9 @@ public class RewardsController {
 
     @PostMapping("/accept/{id}")
     ResponseEntity<?> acceptReward(@PathVariable Long id) {
-        Long resp = rewardsService.accept(id);
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long resp = rewardsService.accept(id, username);
 
         if(resp != null) {
             return ResponseEntity.ok(resp);

@@ -48,22 +48,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        http.csrf().disable();  // wyłączenie CSRF w celu uproszczenia architektura serwera poprzez likwiadację nieużywanego mechanizmu i zlikwidowania zagrożenia ataku CSRF
         http.authorizeRequests()
                 .antMatchers("/auth/signup").permitAll()
-                .antMatchers("/login*").permitAll()
+                .antMatchers("/login").permitAll() // zezwolenie na anonimowe żądania rejestracji i logowania
                 .anyRequest().authenticated()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // tryb stateless serwera
                 .and()
                 .addFilter(authenticationFilter())
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), userDetailsService, secret))
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 
-//        http.requiresChannel()
-//                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
-//                .requiresSecure();
     }
 
     public JsonObjectAuthenticationFilter authenticationFilter() throws Exception {

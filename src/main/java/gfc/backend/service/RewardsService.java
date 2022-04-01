@@ -88,13 +88,26 @@ public class RewardsService {
         return null;
     }
 
-    public Long accept(Long id) {
+    public Long accept(Long id, String username) {
+        Optional<User> requesterOpt = userRepository.findByUsername(username);
+        if (requesterOpt.isEmpty()){
+            return null;
+        }
+        User requester =  requesterOpt.get();
+
         Optional<Reward> optRew = rewardsRepository.findByRewardId(id);
         if (optRew.isEmpty()) {
             return null;
         }
         Reward reward = optRew.get();
+
         rewardsRepository.delete(reward);
+        if(requester.getRole().equals("PARENT") && requester == reward.getOwner()) {
+            requester.setPoints(requester.getPoints() - reward.getPoints());
+            userRepository.save(requester);
+            return requester.getPoints();
+        }
+
         return 0L;
     }
 
