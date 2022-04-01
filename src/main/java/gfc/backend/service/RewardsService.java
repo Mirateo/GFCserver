@@ -80,7 +80,7 @@ public class RewardsService {
             return null;
         }
         Reward reward = optRew.get();
-        if(reward.getPoints() < reward.getOwner().getPoints()) {
+        if(reward.getPoints() <= reward.getOwner().getPoints()) {
             reward.setChosen(true);
             rewardsRepository.save(reward);
             return reward;
