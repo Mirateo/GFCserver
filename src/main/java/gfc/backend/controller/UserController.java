@@ -57,19 +57,20 @@ public class UserController {
         Optional<User> user = userRepository.findById(newData.getId());
 
         if (user.isPresent()) {
-            if (!newData.getUsername().equals(user.get().getUsername())){
+            User justUser = user.get();
+            if (!newData.getUsername().equals(justUser.getUsername())){
                 if(userRepository.existsByUsername(newData.getUsername())){
                     return ResponseEntity.badRequest().body("Błąd: Nazwa użytkownika zajęta!");
                 }
             }
-            if (!newData.getEmail().equals(user.get().getEmail())){
+            if (!newData.getEmail().equals(justUser.getEmail())){
                 if(userRepository.existsByEmail(newData.getEmail())){
                     return ResponseEntity.badRequest().body("Błąd: Adres email jest przypisany do innego konta!");
                 }
             }
             newData.setPassword(passwordEncoder.encode(newData.getPassword()));
-            user.get().edit(newData);
-            userRepository.save(user.get());
+            justUser.edit(newData);
+            userRepository.save(justUser);
             return ResponseEntity.ok("Dane użytkownika poprawnie zmienione.");
         }
         else {
