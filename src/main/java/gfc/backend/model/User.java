@@ -59,7 +59,9 @@ public class User {
     public void edit(User newData) {
         this.username = newData.username;
         this.email = newData.email;
-        this.password = newData.password;
+        if (newData.password != null) {
+            this.password = newData.password;
+        }
         this.role = newData.role;
         this.friendlyName = newData.friendlyName;
     }
