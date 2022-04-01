@@ -68,7 +68,9 @@ public class UserController {
                     return ResponseEntity.badRequest().body("Błąd: Adres email jest przypisany do innego konta!");
                 }
             }
-            newData.setPassword(passwordEncoder.encode(newData.getPassword()));
+            if (newData.password != null){
+                newData.setPassword(passwordEncoder.encode(newData.getPassword()));
+            }
             justUser.edit(newData);
             userRepository.save(justUser);
             return ResponseEntity.ok("Dane użytkownika poprawnie zmienione.");
