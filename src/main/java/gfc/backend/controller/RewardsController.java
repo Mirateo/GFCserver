@@ -89,10 +89,10 @@ public class RewardsController {
     @PostMapping("/unselect/{id}")
     ResponseEntity<?> unSelectReward(@PathVariable Long id) {
         Reward resp = rewardsService.unselect(id);
-
         if(resp == null) {
             return ResponseEntity.badRequest().body("Przesłane dane niepoprawne.");
         } else {
+            System.out.println("reward: " + resp.toString());
             return familyService.payPoints(resp, -1);
         }
     }
