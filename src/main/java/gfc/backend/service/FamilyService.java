@@ -106,6 +106,9 @@ public class FamilyService {
             return ResponseEntity.ok().body(owner.getPoints());
         }
 
+        System.out.println("calcs: " + owner.getPoints().toString() + "-" + reward.getPoints().toString() + "*" +  multiplier.toString());
+        System.out.println("= " + ((Long) (owner.getPoints() - reward.getPoints() * multiplier)).toString());
+
         owner.setPoints(owner.getPoints() - reward.getPoints() * multiplier);
         System.out.println("new_owner: " + owner.toString());
         userRepository.save(owner);
