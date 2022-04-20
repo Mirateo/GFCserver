@@ -97,22 +97,15 @@ public class FamilyService {
         return ResponseEntity.ok().body(justUser.getPoints());
     }
 
-    public ResponseEntity<?> payPoints(Reward reward, Integer multiplier) {
+    public Reward payPoints(Reward reward, Integer multiplier) {
         User owner = reward.getOwner();
-        System.out.println("owner: " + owner.toString());
 
         if (owner == reward.getReporter() && owner.getRole().equals("CHILD")){
-            System.out.println("resp: " + owner.getPoints());
-            return ResponseEntity.ok().body(owner.getPoints());
+            return reward;
         }
-
-        System.out.println("calcs: " + owner.getPoints().toString() + "-" + reward.getPoints().toString() + "*" +  multiplier.toString());
-        System.out.println("= " + ((Long) (owner.getPoints() - reward.getPoints() * multiplier)).toString());
-
         owner.setPoints(owner.getPoints() - reward.getPoints() * multiplier);
-        System.out.println("new_owner: " + owner.toString());
         userRepository.save(owner);
-
-        return ResponseEntity.ok().body(owner.getPoints());
+        reward.setOwner(owner);
+        return reward;
     }
 }

@@ -129,4 +129,8 @@ public class RewardsService {
         }
         return -1L;
     }
+
+    public void saveReward(Reward reward) {
+        rewardsRepository.save(reward);
+    }
 }
