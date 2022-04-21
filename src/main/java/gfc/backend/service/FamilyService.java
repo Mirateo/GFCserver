@@ -93,8 +93,8 @@ public class FamilyService {
             return ResponseEntity.ok().body(justUser.getPoints());
         }
 
-        System.out.println("calcs: " + justUser.getPoints().toString() + "-" + points + "*" +  multiplier.toString());
-        System.out.println("= " + ((Long) (justUser.getPoints() - points * multiplier)).toString());
+        System.out.println("calcs: " + justUser.getPoints().toString() + "+" + points + "*" +  multiplier.toString());
+        System.out.println("= " + justUser.getPoints() + multiplier * points);
         justUser.setPoints(justUser.getPoints() + multiplier * points);
         userRepository.save(justUser);
         System.out.println("new_owner: " + justUser.toString());
