@@ -97,13 +97,13 @@ public class FamilyService {
         return ResponseEntity.ok().body(justUser.getPoints());
     }
 
-    public Reward payPoints(Reward reward, Integer multiplier) {
+    public Reward payPoints(Reward reward, Long multiplier) {
         User owner = reward.getOwner();
 
         if (owner == reward.getReporter() && owner.getRole().equals("CHILD")){
             return reward;
         }
-        owner.setPoints(owner.getPoints() - reward.getPoints() * multiplier);
+        owner.setPoints(owner.getPoints() - (reward.getPoints() * multiplier));
         userRepository.save(owner);
         reward.setOwner(owner);
         return reward;

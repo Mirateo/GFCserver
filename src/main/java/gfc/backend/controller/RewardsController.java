@@ -68,7 +68,19 @@ public class RewardsController {
         if(resp == null) {
             return ResponseEntity.ok().body(-1L);
         } else {
-            Reward reward = familyService.payPoints(resp, 1);
+            Reward reward = familyService.payPoints(resp, 1L);
+            rewardsService.saveReward(reward);
+            return ResponseEntity.ok().body(reward.getOwner().getPoints());
+        }
+    }
+
+    @PostMapping("/unselect/{id}")
+    ResponseEntity<?> unSelectReward(@PathVariable Long id) {
+        Reward resp = rewardsService.unselect(id);
+        if(resp == null) {
+            return ResponseEntity.badRequest().body("Przesłane dane niepoprawne.");
+        } else {
+            Reward reward = familyService.payPoints(resp, -1L);
             rewardsService.saveReward(reward);
             return ResponseEntity.ok().body(reward.getOwner().getPoints());
         }
@@ -88,17 +100,6 @@ public class RewardsController {
 
     }
 
-    @PostMapping("/unselect/{id}")
-    ResponseEntity<?> unSelectReward(@PathVariable Long id) {
-        Reward resp = rewardsService.unselect(id);
-        if(resp == null) {
-            return ResponseEntity.badRequest().body("Przesłane dane niepoprawne.");
-        } else {
-            Reward reward = familyService.payPoints(resp, -1);
-            rewardsService.saveReward(reward);
-            return ResponseEntity.ok().body(reward.getOwner().getPoints());
-        }
-    }
 
     @PostMapping("/delete/{id}")
     ResponseEntity<?> deleteReward(@PathVariable Long id) {
