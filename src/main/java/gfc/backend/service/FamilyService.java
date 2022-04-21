@@ -87,38 +87,23 @@ public class FamilyService {
             return ResponseEntity.badRequest().body("Błąd: Członek rodziny nie istnieje!");
         }
         User justUser = user.get();
-        System.out.println("owner: " + justUser.toString());
         if (ifOwn && justUser.getRole().equals("CHILD")){
-            System.out.println("resp: " + justUser.getPoints());
             return ResponseEntity.ok().body(justUser.getPoints());
         }
 
-        System.out.println("calcs: " + justUser.getPoints().toString() + "+" + points + "*" +  multiplier.toString());
-        System.out.println("= " + (justUser.getPoints() + multiplier * points));
         justUser.setPoints(justUser.getPoints() + multiplier * points);
         userRepository.save(justUser);
-        System.out.println("new_owner: " + justUser.toString());
-
 
         return ResponseEntity.ok().body(justUser.getPoints());
     }
 
     public Reward payPoints(Reward reward, Long multiplier) {
         User owner = reward.getOwner();
-        System.out.println("owner: " + owner.toString());
 
         if (owner == reward.getReporter() && owner.getRole().equals("CHILD")){
-            System.out.println("resp: " + owner.getPoints());
             return reward;
         }
-
-        System.out.println("calcs: " + owner.getPoints().toString() + "-" + reward.getPoints().toString() + "*" +  multiplier.toString());
-        System.out.println("= " + ((Long) (owner.getPoints() - reward.getPoints() * multiplier)).toString());
-
         owner.setPoints(owner.getPoints() - (reward.getPoints() * multiplier));
-        System.out.println("new_owner: " + owner.toString());
-        userRepository.save(owner);
-
         userRepository.save(owner);
         reward.setOwner(owner);
         return reward;
