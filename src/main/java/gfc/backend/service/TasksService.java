@@ -103,7 +103,6 @@ public class TasksService {
             RepeatableTask task = repeatableTaskRepository.findById(id).get();
             task.setLastDone(new Date(System.currentTimeMillis()- 24*60*60*1000));
             repeatableTaskRepository.save(task);
-
             return task;
         }
         return null;

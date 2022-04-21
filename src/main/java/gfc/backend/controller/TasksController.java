@@ -100,11 +100,8 @@ public class TasksController {
         if (task == null) {
             return ResponseEntity.badRequest().body("Task doesn't exist");
         }
-        ResponseEntity<?>ret = familyService.addPoints(new AbstractMap.SimpleEntry<>(task, null), -1);
-
-        return ret;
+        return familyService.addPoints(new AbstractMap.SimpleEntry<>(task, null), -1);
     }
-
 
     @GetMapping("/full")
     ResponseEntity<?> getFamilyTasks() {
@@ -122,7 +119,6 @@ public class TasksController {
 
         return new ResponseEntity<>(tasksList, HttpStatus.OK);
     }
-
 
     @GetMapping("/fullRe")
     ResponseEntity<?> getFamilyReTasks() {
@@ -157,7 +153,6 @@ public class TasksController {
 
         return new ResponseEntity<>(tasksList, HttpStatus.OK);
     }
-
 
     @GetMapping("/allDone")
     ResponseEntity<?> getAllUserDoneTasks() {
