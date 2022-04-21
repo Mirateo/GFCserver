@@ -94,7 +94,7 @@ public class FamilyService {
         }
 
         System.out.println("calcs: " + justUser.getPoints().toString() + "+" + points + "*" +  multiplier.toString());
-        System.out.println("= " + justUser.getPoints() + multiplier * points);
+        System.out.println("= " + (justUser.getPoints() + multiplier * points));
         justUser.setPoints(justUser.getPoints() + multiplier * points);
         userRepository.save(justUser);
         System.out.println("new_owner: " + justUser.toString());
