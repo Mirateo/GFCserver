@@ -101,12 +101,11 @@ public class RewardsService {
         }
         Reward reward = optRew.get();
 
-        if(reward.getOwner().getUsername().equals("PARENT") && reward.getOwner().getUsername().equals(username) && reward.getPoints() > reward.getOwner().getPoints()) {
-            return -1L;
-        }
-
         rewardsRepository.delete(reward);
         if(requester.getRole().equals("PARENT") && requester == reward.getOwner()) {
+            if(reward.getPoints() > requester.getPoints()) {
+                return -1L;
+            }
             requester.setPoints(requester.getPoints() - reward.getPoints());
             userRepository.save(requester);
             return requester.getPoints();
