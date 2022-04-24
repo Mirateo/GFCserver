@@ -101,7 +101,7 @@ public class RewardsService {
         }
         Reward reward = optRew.get();
 
-        if(reward.getOwner().getUsername().equals(username) && reward.getPoints() > reward.getOwner().getPoints()) {
+        if(reward.getOwner().getUsername().equals("PARENT") && reward.getOwner().getUsername().equals(username) && reward.getPoints() > reward.getOwner().getPoints()) {
             return -1L;
         }
 
