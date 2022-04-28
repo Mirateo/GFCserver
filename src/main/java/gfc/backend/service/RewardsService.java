@@ -120,7 +120,7 @@ public class RewardsService {
             return null;
         }
         Reward reward = optRew.get();
-        reward.getOwner().setPoints(reward.getOwner().getPoints() + reward.getPoints()/2);
+        reward.getOwner().setPoints(reward.getOwner().getPoints() - reward.getPoints());
         reward.setChosen(false);
         return reward;
     }
